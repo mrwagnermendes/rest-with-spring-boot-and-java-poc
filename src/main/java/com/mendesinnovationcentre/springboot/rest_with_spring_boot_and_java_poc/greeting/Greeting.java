@@ -1,4 +1,4 @@
-package com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc;
+package com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.greeting;
 
 public class Greeting {
     private final long id;
