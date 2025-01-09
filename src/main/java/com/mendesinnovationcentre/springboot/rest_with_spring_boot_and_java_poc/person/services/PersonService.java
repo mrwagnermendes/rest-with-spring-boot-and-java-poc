@@ -11,23 +11,12 @@ import java.util.logging.Logger;
 @Service
 public class PersonService {
 
-    private static final AtomicLong counter = new AtomicLong();
+    private static final AtomicLong COUNTER = new AtomicLong();
 
-    private final Logger logger = Logger.getLogger(PersonService.class.getName());
-
-    public Person findById(String id) {
-        logger.info("[PersonService] - Finding one Person!");
-        Person person = new Person();
-        person.setId(counter.incrementAndGet());
-        person.setFirstName("Wagner");
-        person.setLastName("Mendes");
-        person.setAddress("Mario Campos Barbosa. n6, Alverca d Ribatejo");
-        person.setGender("Malle");
-        return person;
-    }
+    private final Logger log = Logger.getLogger(PersonService.class.getName());
 
     public List<Person> findAll() {
-        logger.info("[PersonService] - Finding All People!");
+        log.info("[PersonService] - Finding All People!");
         List<Person> persons = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             Person person = mockPerson(i);
@@ -36,27 +25,38 @@ public class PersonService {
         return persons;
     }
 
+    public Person findById(String id) {
+        log.info("[PersonService] - Finding one Person!");
+        Person person = new Person();
+        person.setId(COUNTER.incrementAndGet());
+        person.setFirstName("Wagner");
+        person.setLastName("Mendes");
+        person.setAddress("Mario Campos Barbosa. n6, Alverca d Ribatejo");
+        person.setGender("Male");
+        return person;
+    }
+
     public Person create(Person person) {
-        logger.info("[PersonService] - Creating one person!");
+        log.info("[PersonService] - Creating one person!");
         return person;
     }
 
     public Person update(Person person) {
-        logger.info("[PersonService] - Updating one person!");
+        log.info("[PersonService] - Updating one person!");
         return person;
     }
 
     public void delete(String id) {
-        logger.info("[PersonService] - Deleting one person!");
+        log.info("[PersonService] - Deleting one person!");
     }
 
     private Person mockPerson(int i) {
         Person person = new Person();
-        person.setId(counter.incrementAndGet());
+        person.setId(COUNTER.incrementAndGet());
         person.setFirstName("Person name " + i);
         person.setLastName("Last name " + i);
         person.setAddress("Some address in Brazil " + i);
-        person.setGender("Malle");
+        person.setGender("Male");
         return person;
     }
 }
