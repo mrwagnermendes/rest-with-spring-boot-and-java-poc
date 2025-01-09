@@ -4,9 +4,6 @@ import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.
 
 public class MathUtils {
 
-    public MathUtils() {
-    }
-
     public static Double convertToDouble(String strNumber) {
         if (strNumber == null) {
             return 0D;
