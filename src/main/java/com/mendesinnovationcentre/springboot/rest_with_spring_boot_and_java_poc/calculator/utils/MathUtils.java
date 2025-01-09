@@ -1,26 +1,13 @@
-package com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.calculator.dto;
+package com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.calculator.utils;
 
 import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.exceptions.UnsupportedMathOperationException;
 
-public class MathDto {
+public class MathUtils {
 
-    private final Double numberOne;
-    private final Double numberTwo;
-
-    public MathDto(String numberOne, String numberTwo) {
-        this.numberOne = convertToDouble(numberOne);
-        this.numberTwo = convertToDouble(numberTwo);
+    public MathUtils() {
     }
 
-    public Double getNumberOne() {
-        return numberOne;
-    }
-
-    public Double getNumberTwo() {
-        return numberTwo;
-    }
-
-    private static Double convertToDouble(String strNumber) {
+    public static Double convertToDouble(String strNumber) {
         if (strNumber == null) {
             return 0D;
         } else {
