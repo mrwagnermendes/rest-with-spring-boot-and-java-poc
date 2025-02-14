@@ -4,25 +4,27 @@ import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.
 import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.entities.Person;
 import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.repositories.PersonRepository;
 import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.services.PersonServiceInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
 public class PersonServiceImpl implements PersonServiceInterface {
 
-    private final Logger log = Logger.getLogger(PersonServiceImpl.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(PersonServiceImpl.class);
 
     @Autowired
     private PersonRepository personRepository;
 
     /**
-     * Create and save a new Person on DB.
+     * Create a Person on the DataBase.
      *
-     * @return List<Person>;
+     * @param person ;
+     * @return Person;
      */
     @Override
     public Person create(Person person) {
@@ -31,9 +33,9 @@ public class PersonServiceImpl implements PersonServiceInterface {
     }
 
     /**
-     * Returns a Person list based on All Person Dataset.
+     * Returns All People registered at the DataBase.
      *
-     * @return List<Person>;
+     * @return List < Person>;
      */
     @Override
     public List<Person> searchAll() {
@@ -47,7 +49,7 @@ public class PersonServiceImpl implements PersonServiceInterface {
     }
 
     /**
-     * Returns a Person based on ID.
+     * Returns a Person from DataBase based on id.
      *
      * @param id ;
      * @return Person;
@@ -56,11 +58,11 @@ public class PersonServiceImpl implements PersonServiceInterface {
     public Person searchById(Long id) {
         log.info("[PersonServiceImpl] Searching a Person based on id: {" + id + "}");
         return personRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("[PersonServiceImpl] - Person didn't find"));
+                new ResourceNotFoundException("[PersonServiceImpl] - No records found for this ID!"));
     }
 
     /**
-     * Returns a Person based on NAME.
+     * Returns a Person from DataBase based on name.
      *
      * @param name ;
      * @return Person;
@@ -73,9 +75,10 @@ public class PersonServiceImpl implements PersonServiceInterface {
     }
 
     /**
-     * Update and save a new Person on DB.
+     * Update a Person on the DataBase.
      *
-     * @return List<Person>;
+     * @param person ;
+     * @return Person;
      */
     @Override
     public Person update(Person person) {
@@ -83,6 +86,11 @@ public class PersonServiceImpl implements PersonServiceInterface {
         return this.personRepository.save(person);
     }
 
+    /**
+     * Delete a Person at the DataBase based on id.
+     *
+     * @param id ;
+     */
     @Override
     public void delete(Long id) {
         log.info("[PersonServiceImpl] Deleting Person: {" + id + "}");

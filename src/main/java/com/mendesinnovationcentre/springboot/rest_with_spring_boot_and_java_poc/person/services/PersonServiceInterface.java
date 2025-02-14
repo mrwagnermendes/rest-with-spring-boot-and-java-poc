@@ -15,22 +15,22 @@ public interface PersonServiceInterface {
     Person create(Person person);
 
     /**
-     * Returns All People registered.
+     * Returns All People registered at the DataBase.
      *
      * @return List < Person>;
      */
     List<Person> searchAll();
 
     /**
-     * Returns a Person based on id.
+     * Returns a Person from DataBase based on id.
      *
      * @param id ;
-     * @return Optional<Person>;
+     * @return Person;
      */
     Person searchById(Long id);
 
     /**
-     * Returns a Person based on name.
+     * Returns a Person from DataBase based on name.
      *
      * @param name ;
      * @return Person;
@@ -46,7 +46,7 @@ public interface PersonServiceInterface {
     Person update(Person person);
 
     /**
-     * Delete a Person based on id.
+     * Delete a Person at the DataBase based on id.
      *
      * @param id ;
      */

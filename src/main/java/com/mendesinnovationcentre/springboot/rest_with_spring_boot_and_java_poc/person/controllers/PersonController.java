@@ -4,6 +4,7 @@ import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.
 import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.entities.Person;
 import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.response.Response;
 import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.services.PersonServiceInterface;
+import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.utils.PersonParseUtil;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/person")
@@ -38,7 +37,9 @@ public class PersonController {
     public ResponseEntity<Response<PersonDto>> create(@Valid @RequestBody PersonDto personDto, BindingResult result) {
         log.info("[PersonController] - Adding Person {}", personDto.toString());
         Response<PersonDto> response = new Response<>();
-        Person person = this.generatePersonBasedOnPersonDto(personDto, result);
+
+        Person updatedPerson = personDto.getId().isPresent() ? this.personServiceInterface.searchById(personDto.getId().get()) : new Person();
+        Person person = PersonParseUtil.generatePersonBasedOnPersonDto(personDto, updatedPerson);
 
         if (result.hasErrors()) {
             log.error("[ERROR] - The current data validation was not successfully: {}", result.getAllErrors());
@@ -46,28 +47,28 @@ public class PersonController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        response.setData(this.generatePersonDto(this.personServiceInterface.create(person)));
+        response.setData(PersonParseUtil.generatePersonDto(this.personServiceInterface.create(person)));
         return ResponseEntity.ok(response);
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<PersonDto>> findById(@PathVariable(value = "id") Long id) {
         Response<PersonDto> response = new Response<>();
-        response.setData(generatePersonDto(this.personServiceInterface.searchById(id)));
+        response.setData(PersonParseUtil.generatePersonDto(this.personServiceInterface.searchById(id)));
         return ResponseEntity.ok(response);
     }
 
     @RequestMapping(value = "/firstName/{firstName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<PersonDto>> findByFirstName(@PathVariable(value = "firstName") String firstName) {
         Response<PersonDto> response = new Response<>();
-        response.setData(generatePersonDto(this.personServiceInterface.searchByName(firstName)));
+        response.setData(PersonParseUtil.generatePersonDto(this.personServiceInterface.searchByName(firstName)));
         return ResponseEntity.ok(response);
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<List<PersonDto>>> findAll() {
         Response<List<PersonDto>> response = new Response<>();
-        response.setData(generatePersonDto(this.personServiceInterface.searchAll()));
+        response.setData(PersonParseUtil.generatePersonDtoList(this.personServiceInterface.searchAll()));
         return ResponseEntity.ok(response);
     }
 
@@ -75,7 +76,8 @@ public class PersonController {
     public ResponseEntity<Response<PersonDto>> update(@RequestBody PersonDto personDto, BindingResult result) {
         log.info("[PersonController] - Updating Person {}", personDto.toString());
         Response<PersonDto> response = new Response<>();
-        Person person = this.generatePersonBasedOnPersonDto(personDto, result);
+        Person updatedPerson = personDto.getId().isPresent() ? this.personServiceInterface.searchById(personDto.getId().get()) : new Person();
+        Person person = PersonParseUtil.generatePersonBasedOnPersonDto(personDto, updatedPerson);
 
         if (result.hasErrors()) {
             log.error("[ERROR] - The current data validation was not successfully: {}", result.getAllErrors());
@@ -83,67 +85,12 @@ public class PersonController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        response.setData(this.generatePersonDto(this.personServiceInterface.update(person)));
+        response.setData(PersonParseUtil.generatePersonDto(this.personServiceInterface.update(person)));
         return ResponseEntity.ok(response);
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable(value = "id") Long id) {
         this.personServiceInterface.delete(id);
-    }
-
-    /**
-     * Generate the Person object based on PersonDto parameter.
-     *
-     * @param personDto;
-     * @param result;
-     * @return Person;
-     */
-    private Person generatePersonBasedOnPersonDto(PersonDto personDto, BindingResult result) {
-        Person updatedPerson = new Person();
-        if (personDto.getId().isPresent()) {
-            updatedPerson = this.personServiceInterface.searchById(personDto.getId().get());
-            updatedPerson.setFirstName(personDto.getFirstName());
-            updatedPerson.setLastName(personDto.getLastName());
-            updatedPerson.setGender(personDto.getGender());
-            updatedPerson.setAddress(personDto.getAddress());
-            return updatedPerson;
-        } else {
-            updatedPerson.setFirstName(personDto.getFirstName());
-            updatedPerson.setLastName(personDto.getLastName());
-            updatedPerson.setGender(personDto.getGender());
-            updatedPerson.setAddress(personDto.getAddress());
-        }
-
-        return updatedPerson;
-    }
-
-    /**
-     * Generate a PersonDto list Object based on Person data list.
-     *
-     * @param personList;
-     * @return List<PersonDto>;
-     */
-    private List<PersonDto> generatePersonDto(List<Person> personList) {
-        List<PersonDto> personDtoList = new ArrayList<>();
-
-        personList.forEach(person -> personDtoList.add(generatePersonDto(person)));
-        return personDtoList;
-    }
-
-    /**
-     * Generate a PersonDto Object based on Person data.
-     *
-     * @param person;
-     * @return PersonDto;
-     */
-    private PersonDto generatePersonDto(Person person) {
-        PersonDto personDto = new PersonDto();
-        personDto.setId(Optional.of(person.getId()));
-        personDto.setFirstName(person.getFirstName());
-        personDto.setLastName(person.getLastName());
-        personDto.setGender(person.getGender());
-        personDto.setAddress(person.getAddress());
-        return personDto;
     }
 }
