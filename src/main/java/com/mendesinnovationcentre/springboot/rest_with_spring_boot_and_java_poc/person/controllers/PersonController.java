@@ -33,7 +33,7 @@ public class PersonController {
      * @param result;
      * @return ResponseEntity<Response < PersonDto>>;
      */
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<PersonDto>> create(@Valid @RequestBody PersonDto personDto, BindingResult result) {
         log.info("[PersonController] - Adding Person {}", personDto.toString());
         Response<PersonDto> response = new Response<>();
@@ -51,28 +51,28 @@ public class PersonController {
         return ResponseEntity.ok(response);
     }
 
-    @RequestMapping(value = "/id/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<PersonDto>> findById(@PathVariable(value = "id") Long id) {
         Response<PersonDto> response = new Response<>();
         response.setData(PersonParseUtil.generatePersonDto(this.personServiceInterface.searchById(id)));
         return ResponseEntity.ok(response);
     }
 
-    @RequestMapping(value = "/firstName/{firstName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/firstName/{firstName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<PersonDto>> findByFirstName(@PathVariable(value = "firstName") String firstName) {
         Response<PersonDto> response = new Response<>();
         response.setData(PersonParseUtil.generatePersonDto(this.personServiceInterface.searchByName(firstName)));
         return ResponseEntity.ok(response);
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<List<PersonDto>>> findAll() {
         Response<List<PersonDto>> response = new Response<>();
         response.setData(PersonParseUtil.generatePersonDtoList(this.personServiceInterface.searchAll()));
         return ResponseEntity.ok(response);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<PersonDto>> update(@RequestBody PersonDto personDto, BindingResult result) {
         log.info("[PersonController] - Updating Person {}", personDto.toString());
         Response<PersonDto> response = new Response<>();
@@ -89,8 +89,9 @@ public class PersonController {
         return ResponseEntity.ok(response);
     }
 
-    @RequestMapping(value = "/id/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(value = "id") Long id) {
+    @DeleteMapping(value = "/id/{id}")
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
         this.personServiceInterface.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

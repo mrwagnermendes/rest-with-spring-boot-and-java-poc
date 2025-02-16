@@ -83,6 +83,9 @@ public class PersonServiceImpl implements PersonServiceInterface {
     @Override
     public Person update(Person person) {
         log.info("[PersonServiceImpl] Updating Person: {" + person + "}");
+        personRepository.findById(person.getId()).orElseThrow(() ->
+                new ResourceNotFoundException("[PersonServiceImpl] - No records found for this ID!"));
+
         return this.personRepository.save(person);
     }
 
@@ -94,6 +97,8 @@ public class PersonServiceImpl implements PersonServiceInterface {
     @Override
     public void delete(Long id) {
         log.info("[PersonServiceImpl] Deleting Person: {" + id + "}");
+        personRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("[PersonServiceImpl] - No records found for this ID!"));
         this.personRepository.deleteById(id);
     }
 }
