@@ -21,17 +21,13 @@ public class PersonParseUtil {
      */
     public static Person generatePersonBasedOnPersonDto(PersonDto personDto, Person updatedPerson) {
         if (personDto.getId().isPresent()) {
-            updatedPerson.setFirstName(personDto.getFirstName());
-            updatedPerson.setLastName(personDto.getLastName());
-            updatedPerson.setGender(personDto.getGender());
-            updatedPerson.setAddress(personDto.getAddress());
-            return updatedPerson;
-        } else {
-            updatedPerson.setFirstName(personDto.getFirstName());
-            updatedPerson.setLastName(personDto.getLastName());
-            updatedPerson.setGender(personDto.getGender());
-            updatedPerson.setAddress(personDto.getAddress());
+            updatedPerson.setId(personDto.getId().get());
         }
+
+        updatedPerson.setFirstName(personDto.getFirstName());
+        updatedPerson.setLastName(personDto.getLastName());
+        updatedPerson.setGender(personDto.getGender());
+        updatedPerson.setAddress(personDto.getAddress());
 
         return updatedPerson;
     }
