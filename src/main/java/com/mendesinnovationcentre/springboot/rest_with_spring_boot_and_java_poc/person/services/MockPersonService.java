@@ -1,6 +1,6 @@
 package com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.services;
 
-import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.dto.PersonDto;
+import com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.dto.v1.PersonDtoV1;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,48 +15,48 @@ public class MockPersonService {
 
     private final Logger log = Logger.getLogger(MockPersonService.class.getName());
 
-    public List<PersonDto> findAll() {
+    public List<PersonDtoV1> findAll() {
         log.info("[PersonService] - Finding All People!");
-        List<PersonDto> personDtos = new ArrayList<>();
+        List<PersonDtoV1> personDtoV1s = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            PersonDto personDto = mockPerson(i);
-            personDtos.add(personDto);
+            PersonDtoV1 personDtoV1 = mockPerson(i);
+            personDtoV1s.add(personDtoV1);
         }
-        return personDtos;
+        return personDtoV1s;
     }
 
-    public PersonDto findById(String id) {
+    public PersonDtoV1 findById(String id) {
         log.info("[PersonService] - Finding one Person!");
-        PersonDto personDto = new PersonDto();
+        PersonDtoV1 personDtoV1 = new PersonDtoV1();
      //   personDto.setId(COUNTER.incrementAndGet());
-        personDto.setFirstName("Wagner");
-        personDto.setLastName("Mendes");
-        personDto.setAddress("Mario Campos Barbosa. n6, Alverca d Ribatejo");
-        personDto.setGender("Male");
-        return personDto;
+        personDtoV1.setFirstName("Wagner");
+        personDtoV1.setLastName("Mendes");
+        personDtoV1.setAddress("Mario Campos Barbosa. n6, Alverca d Ribatejo");
+        personDtoV1.setGender("Male");
+        return personDtoV1;
     }
 
-    public PersonDto create(PersonDto personDto) {
+    public PersonDtoV1 create(PersonDtoV1 personDtoV1) {
         log.info("[PersonService] - Creating one person!");
-        return personDto;
+        return personDtoV1;
     }
 
-    public PersonDto update(PersonDto personDto) {
+    public PersonDtoV1 update(PersonDtoV1 personDtoV1) {
         log.info("[PersonService] - Updating one person!");
-        return personDto;
+        return personDtoV1;
     }
 
     public void delete(String id) {
         log.info("[PersonService] - Deleting one person!");
     }
 
-    private PersonDto mockPerson(int i) {
-        PersonDto personDto = new PersonDto();
+    private PersonDtoV1 mockPerson(int i) {
+        PersonDtoV1 personDtoV1 = new PersonDtoV1();
      //   personDto.setId(COUNTER.incrementAndGet());
-        personDto.setFirstName("Person name " + i);
-        personDto.setLastName("Last name " + i);
-        personDto.setAddress("Some address in Brazil " + i);
-        personDto.setGender("Male");
-        return personDto;
+        personDtoV1.setFirstName("Person name " + i);
+        personDtoV1.setLastName("Last name " + i);
+        personDtoV1.setAddress("Some address in Brazil " + i);
+        personDtoV1.setGender("Male");
+        return personDtoV1;
     }
 }

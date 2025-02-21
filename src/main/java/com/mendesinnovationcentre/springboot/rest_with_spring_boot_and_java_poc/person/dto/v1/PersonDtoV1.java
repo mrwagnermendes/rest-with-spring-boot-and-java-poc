@@ -1,4 +1,4 @@
-package com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.dto;
+package com.mendesinnovationcentre.springboot.rest_with_spring_boot_and_java_poc.person.dto.v1;
 
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import java.util.Objects;
 import java.util.Optional;
 
-public class PersonDto {
+public class PersonDtoV1 {
 
     private Optional<Long> id = Optional.empty();
     private String firstName;
@@ -14,7 +14,7 @@ public class PersonDto {
     private String address;
     private String gender;
 
-    public PersonDto() {
+    public PersonDtoV1() {
     }
 
     public Optional<Long> getId() {
@@ -70,16 +70,27 @@ public class PersonDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersonDto personDto = (PersonDto) o;
-        return Objects.equals(id, personDto.id)
-                && Objects.equals(firstName, personDto.firstName)
-                && Objects.equals(lastName, personDto.lastName)
-                && Objects.equals(address, personDto.address)
-                && Objects.equals(gender, personDto.gender);
+        PersonDtoV1 personDtoV1 = (PersonDtoV1) o;
+        return Objects.equals(id, personDtoV1.id)
+                && Objects.equals(firstName, personDtoV1.firstName)
+                && Objects.equals(lastName, personDtoV1.lastName)
+                && Objects.equals(address, personDtoV1.address)
+                && Objects.equals(gender, personDtoV1.gender);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, address, gender);
+    }
+
+    @Override
+    public String toString() {
+        return "PersonDto{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", gender='" + gender + '\'' +
+                '}';
     }
 }
